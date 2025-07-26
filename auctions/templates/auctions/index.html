@@ -1,0 +1,21 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+  <h2>Active Listings</h2>
+  <div>
+    {% for listing in listings %}
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">
+            <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+          </h5>
+          <p class="card-text">{{ listing.description }}</p>
+          <p class="card-text"><strong>Price:</strong> ${{ listing.starting_bid }}</p>
+          <p class="card-text"><em>Listed by {{ listing.owner }}</em></p>
+        </div>
+      </div>
+    {% empty %}
+      <p>No active listings yet.</p>
+    {% endfor %}
+  </div>
+{% endblock %}
