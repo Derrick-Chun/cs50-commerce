@@ -1,21 +1,32 @@
 {% extends "auctions/layout.html" %}
-
 {% block body %}
-  <h2>Active Listings</h2>
-  <div>
-    {% for listing in listings %}
-      <div class="card mb-3">
-        <div class="card-body">
-          <h5 class="card-title">
-            <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
-          </h5>
-          <p class="card-text">{{ listing.description }}</p>
-          <p class="card-text"><strong>Price:</strong> ${{ listing.starting_bid }}</p>
-          <p class="card-text"><em>Listed by {{ listing.owner }}</em></p>
-        </div>
+<h2>Active Listings</h2>
+
+{% if listings %}
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;">
+    {% for l in listings %}
+      <div style="border:1px solid #e5e7eb;border-radius:10px;padding:14px;">
+        <a href="{% url 'listing' l.id %}" style="text-decoration:none;color:inherit;display:block;">
+          {% if l.image_url %}
+            <img src="{{ l.image_url }}" alt="{{ l.title }}"
+                 style="width:100%;height:180px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
+          {% endif %}
+          <h3 style="margin:6px 0 8px 0;">{{ l.title }}</h3>
+        </a>
+        {% if l.description %}
+          <p style="margin:0 0 8px 0;color:#374151;">
+            {{ l.description|truncatechars:140 }}
+          </p>
+        {% endif %}
+        <p style="margin:0 0 6px 0;"><strong>Price:</strong> ${{ l.starting_bid }}</p>
+        {% if l.category %}
+          <p style="margin:0;color:#6b7280;"><small>Category: {{ l.category }}</small></p>
+        {% endif %}
+        <p style="margin:8px 0 0 0;color:#6b7280;"><small>Listed by {{ l.owner }}</small></p>
       </div>
-    {% empty %}
-      <p>No active listings yet.</p>
     {% endfor %}
   </div>
+{% else %}
+  <p>No active listings.</p>
+{% endif %}
 {% endblock %}

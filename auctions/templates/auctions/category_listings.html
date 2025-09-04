@@ -1,14 +1,28 @@
 {% extends "auctions/layout.html" %}
-
 {% block body %}
-  <h2>Listings in "{{ category }}"</h2>
-  <ul>
-    {% for listing in listings %}
-      <li>
-        <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a> - ${{ listing.starting_bid }}
-      </li>
-    {% empty %}
-      <li>No active listings in this category.</li>
+<h2>Category: {{ category }}</h2>
+
+{% if listings %}
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;">
+    {% for l in listings %}
+      <div style="border:1px solid #e5e7eb;border-radius:10px;padding:14px;">
+        <a href="{% url 'listing' l.id %}" style="text-decoration:none;color:inherit;display:block;">
+          {% if l.image_url %}
+            <img src="{{ l.image_url }}" alt="{{ l.title }}"
+                 style="width:100%;height:180px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
+          {% endif %}
+          <h3 style="margin:6px 0 8px 0;">{{ l.title }}</h3>
+        </a>
+        {% if l.description %}
+          <p style="margin:0 0 8px 0;color:#374151;">
+            {{ l.description|truncatechars:140 }}
+          </p>
+        {% endif %}
+        <p style="margin:0;"><strong>Price:</strong> ${{ l.starting_bid }}</p>
+      </div>
     {% endfor %}
-  </ul>
+  </div>
+{% else %}
+  <p>No active listings in this category.</p>
+{% endif %}
 {% endblock %}

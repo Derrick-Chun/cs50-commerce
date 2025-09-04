@@ -3,29 +3,37 @@
 {% block body %}
   <h2>{{ listing.title }}</h2>
   <p><strong>Description:</strong> {{ listing.description }}</p>
-  <p><strong>Price:</strong> ${{ listing.starting_bid }}</p>
+  <p><strong>Price:</strong> ${{ listing.starting_bid|floatformat:2 }}</p>
   <p><strong>Owner:</strong> {{ listing.owner }}</p>
 
   {% if listing.image_url %}
     <img src="{{ listing.image_url }}" alt="{{ listing.title }}" style="max-width: 400px; height: auto;">
   {% endif %}
 
+  {# Closed state #}
   {% if not listing.is_active %}
     <p><strong>Auction Closed.</strong></p>
     {% if listing.winner %}
       <p><strong>Winner:</strong> {{ listing.winner.username }}</p>
+      {% if you_won %}
+        <p style="color:#0a7; font-weight:600;">You won this auction!</p>
+      {% endif %}
     {% else %}
       <p>No winning bids were placed.</p>
     {% endif %}
+    <p><em>Bidding is disabled for closed auctions.</em></p>
   {% endif %}
 
   {% if user.is_authenticated %}
-    <form action="{% url 'place_bid' listing.id %}" method="post">
-      {% csrf_token %}
-      <label for="bid">Your Bid:</label>
-      <input type="number" step="0.01" name="bid" required>
-      <button type="submit">Place Bid</button>
-    </form>
+    {# Only show the bid form when the listing is active #}
+    {% if listing.is_active %}
+      <form action="{% url 'place_bid' listing.id %}" method="post">
+        {% csrf_token %}
+        <label for="bid">Your Bid:</label>
+        <input type="number" step="0.01" name="bid" required>
+        <button type="submit">Place Bid</button>
+      </form>
+    {% endif %}
 
     <hr>
 

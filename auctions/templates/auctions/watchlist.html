@@ -1,20 +1,13 @@
 {% extends "auctions/layout.html" %}
-
 {% block body %}
-  <h2>Your Watchlist</h2>
-  <div>
-    {% for listing in listings %}
-      <div class="card mb-3">
-        <div class="card-body">
-          <h5 class="card-title">
-            <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
-          </h5>
-          <p class="card-text">{{ listing.description }}</p>
-          <p class="card-text"><strong>Price:</strong> ${{ listing.starting_bid }}</p>
-        </div>
-      </div>
-    {% empty %}
-      <p>You haven’t added any listings to your watchlist yet.</p>
+<h2>Watchlist</h2>
+{% if listings %}
+  <ul>
+    {% for l in listings %}
+      <li><a href="{% url 'listing' l.id %}">{{ l.title }}</a> — ${{ l.starting_bid }}</li>
     {% endfor %}
-  </div>
+  </ul>
+{% else %}
+  <p>Your watchlist is empty.</p>
+{% endif %}
 {% endblock %}

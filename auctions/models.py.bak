@@ -3,7 +3,7 @@ from django.db import models
 
 
 class User(AbstractUser):
-    # Many-to-many watchlist
+    # Listings the user is watching
     watchlist = models.ManyToManyField("Listing", blank=True, related_name="watchers")
 
 
@@ -11,8 +11,9 @@ class Listing(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     starting_bid = models.DecimalField(max_digits=10, decimal_places=2)
-    image_url = models.URLField(blank=True, null=True)         # <-- null=True
-    category = models.CharField(max_length=64, blank=True, null=True)  # <-- null=True
+    image_url = models.URLField(blank=True)
+    # Allow NULLs to avoid migration prompts if older rows exist
+    category = models.CharField(max_length=64, blank=True, null=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
     is_active = models.BooleanField(default=True)
     winner = models.ForeignKey(
