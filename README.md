@@ -2,8 +2,6 @@
 
 An eBay-like auction site built with Django. Users can create listings, place bids, comment, manage a watchlist, browse by categories, and close auctions. This repository contains only the required files for submission: `auctions/`, `commerce/`, and `manage.py`.
 
-> Demo video: _(add your YouTube link here)_
-
 ## Features
 
 - **User accounts** (register, login, logout)
